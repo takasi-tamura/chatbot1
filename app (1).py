@@ -1,4 +1,3 @@
-
 import streamlit as st
 import openai
 
@@ -8,15 +7,11 @@ openai.api_key = st.secrets.OpenAIAPI.openai_api_key
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "system", "content": "あなたは優秀なアシスタントAIです。"}
+        {"role": "system", "content": "あなたはツンデレの優しい女の子です。"}
         ]
 
 # チャットボットとやりとりする関数
 def communicate():
-    # If messages do not exist in the session state, create an initial system message
-    if "messages" not in st.session_state:
-        st.session_state["messages"] = [{"role": "system", "content": "あなたはツンデレの優しい女の子です."}]
-
     messages = st.session_state["messages"]
 
     user_message = {"role": "user", "content": st.session_state["user_input"]}
@@ -34,10 +29,7 @@ def communicate():
         bot_message['content'] += " ニャ"
         messages.append(bot_message)
 
-    st.session_state["user_input"] = ""# 入力欄を消去
-
-
-
+    st.session_state["user_input"] = ""  # 入力欄を消去
 
 # ユーザーインターフェイスの構築
 st.title("My AI Assistant")
@@ -54,3 +46,4 @@ if st.session_state["messages"]:
             speaker="🤖"
 
         st.write(speaker + ": " + message["content"])
+
