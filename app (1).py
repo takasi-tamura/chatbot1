@@ -8,13 +8,15 @@ openai.api_key = st.secrets.OpenAIAPI.openai_api_key
 # st.session_stateを使いメッセージのやりとりを保存
 if "messages" not in st.session_state:
     st.session_state["messages"] = [
-        {"role": "system", "content": st.secrets.AppSettings.chatbot_setting}
-         [AppSettings]
-        chatbot_setting = "あなたは優秀な英語教師です。何を聞かれても英語で答えてください。"]
-       
+        {"role": "system", "content": "あなたは優秀なアシスタントAIです。"}
+        ]
 
 # チャットボットとやりとりする関数
 def communicate():
+    # If messages do not exist in the session state, create an initial system message
+    if "messages" not in st.session_state:
+        st.session_state["messages"] = [{"role": "system", "content": "あなたはツンデレの優しい女の子です."}]
+
     messages = st.session_state["messages"]
 
     user_message = {"role": "user", "content": st.session_state["user_input"]}
@@ -23,12 +25,18 @@ def communicate():
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo",
         messages=messages
-    )  
+    )
 
     bot_message = response["choices"][0]["message"]
-    messages.append(bot_message)
+    # Check if 'content' is in the bot_message
+    if 'content' in bot_message:
+        # Add "ニャ" at the end of the message content
+        bot_message['content'] += " ニャ"
+        messages.append(bot_message)
 
-    st.session_state["user_input"] = ""  # 入力欄を消去
+    st.session_state["user_input"] = ""# 入力欄を消去
+
+
 
 
 # ユーザーインターフェイスの構築
